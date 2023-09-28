@@ -1,7 +1,17 @@
 on: push
 jobs:
-    first-job:
+    scratch-org-test:
         runs-on: ubuntu-latest
         steps:
-            - run: node --version
-            - run: npm --version
+            # Checkout the source code
+            - name: 'Checkout source code'
+              uses: actions/checkout@v4
+
+            # Install Salesforce CLI
+            - name: 'Install Salesforce CLI'
+              run: |
+                wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
+                mkdir ~/cli/sf
+                tar xJf sf-linux-x64.tar.xz -C ~/cli/sf --strip-components 1
+                echo "$HOME/cli/sf/bin" >> $GITHUB_PATH
+                ~/cli/sf/bin/sf version
