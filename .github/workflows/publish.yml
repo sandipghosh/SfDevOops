@@ -23,14 +23,15 @@ jobs:
                 for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
                   if [[ $file != *"yml"* ]]; then
                     if [[ -z "$res" ]]; then
-                      res="${res} ${file}"
-                      echo $res
-                    else
                       res=$file
-                      echo $res
+                      #echo $res                     
+                    else
+                      res="${res} ${file}"
+                      #echo $res
                     fi
                   fi
                 done
+                echo $res
                 echo "CHANGED_FILES=$res" >> $GITHUB_OUTPUT
 
             - name: 'Test Changed File List'
