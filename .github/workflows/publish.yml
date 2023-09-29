@@ -16,15 +16,16 @@ jobs:
             #3 set all the Added or Changed files into a internal veriable 'CHANGED_FILES'
             - name: 'Echo Added or Changed files'
               id: ConsolidatedChangedFiles
+              shell: bash
               run: |
-                res = ""
+                res=""
                 for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
                   if [[ $file != *"yml"* ]]; then
                     if [[ -z "$res" ]]; then
                       res="${res} ${file}"
                       echo $res
                     else
-                      res = $file
+                      res=$file
                       echo $res
                     fi
                   fi
