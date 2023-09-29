@@ -20,9 +20,9 @@ jobs:
             - name: 'Get Added or Changed files'
               uses: tj-actions/changed-files@v39
               id: changed-files
-              with: 
-                files: |
-                  *.cls
+              #with: 
+                #files: |
+                  #*.cls
 
             #Display all the Added or Changed files
             - name: 'Echo Added or Changed files'
