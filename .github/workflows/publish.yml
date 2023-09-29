@@ -27,4 +27,6 @@ jobs:
             #Display all the Added or Changed files
             - name: 'Echo Added or Changed files'
               run: |
-                echo "${{ steps.changed-files.outputs.all_changed_files }}"
+                for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+                  echo "$file was added or modified"
+                done
