@@ -4,7 +4,7 @@ public class SampleApexTest {
     @isTest 
     static void textGetMessage(){
         String message = sampleApex.getMessage('Sandip dear');
-        //Test 14
+        //Test 15
         System.assertEquals('Hello dear Sandip', message, 'getMessage method failed');
     }
 }
