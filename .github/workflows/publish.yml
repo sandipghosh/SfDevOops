@@ -32,7 +32,7 @@ jobs:
                   fi
                 done
                 #echo ::set-output name=CHANGED_FILES:: $res 
-                echo CHANGED_FILES=$res >> $GITHUB_OUTPUT
+                echo "CHANGED_FILES=$res" >> $GITHUB_OUTPUT
 
             - name: 'Test Changed File List'
               run: |
