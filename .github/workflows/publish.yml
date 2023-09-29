@@ -16,10 +16,15 @@ jobs:
                 echo "$HOME/sf/bin" >> $GITHUB_PATH
                 ~/sf/bin/sf version
 
-            #Get all the changed files
+            #Get Added or Changed files
             - name: 'Get Added or Changed files'
               uses: DawChihLiou/changed-files-action@v1
               id: changed-files
               with:
                 token: ${{ secrets.GITHUB_TOKEN }}
                 output: 'string'
+
+            #Display all the Added or Changed files
+            - name: 'Echo Added or Changed files'
+              run: |
+                echo "${{ steps.changed-files.outputs.filenames }}"
