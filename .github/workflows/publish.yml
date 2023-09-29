@@ -14,6 +14,7 @@ jobs:
               id: changed-files
 
             #3 set all the Added or Changed files into a internal veriable 'CHANGED_FILES'
+            #Note: In the veriable assignment statement there should be no spaces between the variable name the equals operator and the value
             - name: 'Echo Added or Changed files'
               id: ConsolidatedChangedFiles
               shell: bash
@@ -34,5 +35,5 @@ jobs:
 
             - name: 'Test Changed File List'
               run: |
-                echo ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
-                #echo $changedFiles
+                changedFiles=${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
+                echo $changedFiles
