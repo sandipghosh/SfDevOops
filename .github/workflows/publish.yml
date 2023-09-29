@@ -17,17 +17,15 @@ jobs:
             - name: 'Echo Added or Changed files'
               id: ConsolidatedChangedFiles
               run: |
-                varcnt=1
+                res = ""
                 for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
                   if [[ $file != *"yml"* ]]; then
-                    if [[ $varcnt == 2 ]]; then
+                    if [[ -z "$res" ]]; then
                       res="${res} ${file}"
                       echo $res
-                    fi
-                    if [[ $varcnt == 1 ]]; then
+                    else
                       res = $file
                       echo $res
-                      varcnt = 2
                     fi
                   fi
                 done

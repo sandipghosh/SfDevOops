@@ -1,6 +1,6 @@
 public with sharing class SampleApex {
     public static String getMessage(String name){
-        //Test 5
+        //Test 6
         return 'Hello ' + name;
     }
 }
