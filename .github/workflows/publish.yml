@@ -75,7 +75,7 @@ jobs:
                     echo "No changed or added files is fund to deploy"
                 else
                     echo $changedFiles
-                    sf project deploy start --target-org Test-Scratch-Org --api-version 58.0 --source-dir ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
+                    sf project deploy start --target-org Test-Scratch-Org --api-version 59.0 --source-dir ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
                 fi
                 #sf project deploy start --target-org Test-Scratch-Org --api-version 58.0
 
