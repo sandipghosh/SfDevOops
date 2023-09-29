@@ -82,10 +82,16 @@ jobs:
             #10 Execute test for entire scratch org
             - name: 'Execute test for entire scratch org'
               run: |
-                sf apex run test --result-format human --target-org my-scratch-org --synchronous --code-coverage --detailed-coverage --output-dir ./TestRuns
+                sf apex run test --result-format human --target-org Test-Scratch-Org --synchronous --code-coverage --detailed-coverage --output-dir ./TestRuns
 
-            # Housekeeping
+            #11 Upload code coverage data
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
+              env:
+                CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+            #12 Housekeeping
             - name: 'Delete scratch org'
               if: always()
               run: |
-                sf org delete scratch --target-org Test-Scratch-Org --no-prompt
+                sf org delete scratch --target-org Test-Scratch-Org --no-prompt           
