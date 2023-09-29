@@ -15,3 +15,11 @@ jobs:
                 tar xJf sf-linux-x64.tar.xz -C ~/sf --strip-components 1
                 echo "$HOME/sf/bin" >> $GITHUB_PATH
                 ~/sf/bin/sf version
+
+            #Get all the changed files
+            - name: 'Get Added or Changed files'
+              uses: DawChihLiou/changed-files-action@v1
+              id: changed-files
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                output: 'string'
