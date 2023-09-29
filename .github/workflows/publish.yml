@@ -25,13 +25,12 @@ jobs:
                       echo $res
                     fi
                     if [[ $varcnt == 1 ]]; then
-                      res = ${file}
+                      res = $file
                       echo $res
                       varcnt = 2
                     fi
                   fi
                 done
-                #echo ::set-output name=CHANGED_FILES:: $res 
                 echo "CHANGED_FILES=$res" >> $GITHUB_OUTPUT
 
             - name: 'Test Changed File List'
