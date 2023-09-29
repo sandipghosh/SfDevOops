@@ -3,11 +3,7 @@ jobs:
     scratch-org-test:
         runs-on: ubuntu-latest
         steps:
-            # Checkout the source code
-            - name: 'Checkout source code'
-              uses: actions/checkout@v4
-
-            # Install Salesforce CLI
+            #1. Install Salesforce CLI
             - name: 'Install Salesforce CLI'
               run: |
                 wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
@@ -15,6 +11,10 @@ jobs:
                 tar xJf sf-linux-x64.tar.xz -C ~/sf --strip-components 1
                 echo "$HOME/sf/bin" >> $GITHUB_PATH
                 ~/sf/bin/sf version
+
+            #2. Checkout the source code
+            - name: 'Checkout source code'
+              uses: actions/checkout@v4
 
             #Get Added or Changed files
             - name: 'Get Added or Changed files'
