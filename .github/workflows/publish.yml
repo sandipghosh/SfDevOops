@@ -35,5 +35,5 @@ jobs:
 
             - name: 'Test Changed File List'
               run: |
-                changedFiles=${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
+                changedFiles="${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}"
                 echo $changedFiles
