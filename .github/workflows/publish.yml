@@ -67,7 +67,7 @@ jobs:
             #6. Get SFDX_URL from stored secret and extracted into a text files to use on login
             - name: 'Populate auth file with SFDX_URL secret'
               run: |
-                echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
+                echo ${{secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
                 secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
                 if [ $secretFileSize == 1 ]; then
                   echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
@@ -77,12 +77,14 @@ jobs:
             #7 Authenticate Salesforce org using SFDX_URL with Dev-Hub 
             - name: 'Authenticate Salesforce org using SFDX_URL'
               run: |
-                sf org login sfdx-url --sfdx-url-file ./DEVHUB_SFDX_URL.txt --set-default --alias lwctraining --set-default-dev-hub --alias devOopsHub
+                sf org login sfdx-url --sfdx-url-file ./DEVHUB_SFDX_URL.txt --set-default --alias ${{secrets.SOURCE_ORG}} --set-default-dev-hub --alias ${{secrets.DEV_HUB_ALIAS}} 
+                #devOopsHub
 
             #8 Creating scratch org targeting to Dev-Hub "devOopsHub"
             - name: 'Creating scratch org'
               run: |
-                sf org create scratch --definition-file ./config/project-scratch-def.json --edition developer --alias Test-Scratch-Org --target-dev-hub devOopsHub
+                sf org create scratch --definition-file ./config/project-scratch-def.json --edition developer --alias ${{secrets.SCRATCH_ORG_ALIAS}}  --target-dev-hub ${{secrets.DEV_HUB_ALIAS}} 
+                #devOopsHub
 
             #9 Deply the changes into the sales force scratch org
             - name: 'Deply the changes into the sales force scratch org'
@@ -92,14 +94,14 @@ jobs:
                     echo "No changed or added files is fund to deploy"
                 else
                     echo $changedFiles
-                    sf project deploy start --target-org Test-Scratch-Org --api-version 59.0 --source-dir ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
+                    sf project deploy start --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --api-version 59.0 --source-dir ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
                 fi
                 #sf project deploy start --target-org Test-Scratch-Org --api-version 58.0
 
             #10 Execute test for entire scratch org
             - name: 'Execute test for entire scratch org'
               run: |
-                sf apex run test --result-format human --target-org Test-Scratch-Org --synchronous --code-coverage --detailed-coverage --output-dir ./test-results
+                sf apex run test --result-format human --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --synchronous --code-coverage --detailed-coverage --output-dir ./test-results
 
             #11 Upload code coverage data
             #- name: Upload coverage reports to Codecov
@@ -115,9 +117,9 @@ jobs:
                 files: |
                   test-results/test-result.json
                   test-results/test-result.xml
-                  
+
             #12 Housekeeping
             - name: 'Delete scratch org'
               if: always()
               run: |  
-                sf org delete scratch --target-org Test-Scratch-Org --no-prompt           
+                sf org delete scratch --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --no-prompt           
