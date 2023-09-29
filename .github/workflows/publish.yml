@@ -3,7 +3,41 @@ jobs:
     scratch-org-test:
         runs-on: ubuntu-latest
         steps:
-            #1. Install Salesforce CLI
+            #1. Checkout the source code for identifying changes
+            - uses: actions/checkout@v4
+              with:
+                fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+            #2 Get Added or Changed files
+            - name: 'Get added or changed from the currect changeset files'
+              uses: tj-actions/changed-files@v39
+              id: changed-files
+
+            #3 set all the Added or Changed files into a internal veriable 'CHANGED_FILES'
+            - name: 'Echo Added or Changed files'
+              id: ConsolidatedChangedFiles
+              run: |
+                varcnt=1
+                for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+                  if [[ $file != *"yml"* ]]; then
+                    if [[ $varcnt == 2 ]]; then
+                      res="${res} ${file}"
+                      echo $res
+                    fi
+                    if [[ $varcnt == 1 ]]; then
+                      res = ${file}
+                      echo $res
+                      varcnt = 2
+                    fi
+                  fi
+                done
+                echo ::set-output name=CHANGED_FILES:: $res 
+
+            #4. Checkout the source code to deploy
+            - name: 'Checkout source code'
+              uses: actions/checkout@v4
+
+            #5. Install Salesforce CLI and set environment path veriable
             - name: 'Install Salesforce CLI'
               run: |
                 wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
@@ -12,21 +46,39 @@ jobs:
                 echo "$HOME/sf/bin" >> $GITHUB_PATH
                 ~/sf/bin/sf version
 
-            #2. Checkout the source code
-            - name: 'Checkout source code'
-              uses: actions/checkout@v4
-
-            #Get Added or Changed files
-            - name: 'Get Added or Changed files'
-              uses: tj-actions/changed-files@v39
-              id: changed-files
-              #with: 
-                #files: |
-                  #*.cls
-
-            #Display all the Added or Changed files
-            - name: 'Echo Added or Changed files'
+            #6. Get SFDX_URL from stored secret and extracted into a text files to use on login
+            - name: 'Populate auth file with SFDX_URL secret'
               run: |
-                for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-                  echo "$file was added or modified"
-                done
+                echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
+                secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
+                if [ $secretFileSize == 1 ]; then
+                  echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
+                  exit 1;
+                fi
+
+            #7 Authenticate Salesforce org using SFDX_URL with Dev-Hub 
+            - name: 'Authenticate Salesforce org using SFDX_URL'
+              run: |
+                sf org login sfdx-url --sfdx-url-file ./DEVHUB_SFDX_URL.txt --set-default --alias lwctraining --set-default-dev-hub --alias devOopsHub
+
+            #8 Creating scratch org targeting to Dev-Hub "devOopsHub"
+            - name: 'Creating scratch org'
+              run: |
+                sf org create scratch --definition-file ./config/project-scratch-def.json --edition developer --alias Test-Scratch-Org --target-dev-hub devOopsHub
+
+            #9 Deply the changes into the sales force scratch org
+            - name: 'Deply the changes into the sales force scratch org'
+              run: |
+                echo ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
+                sf project deploy start --target-org Test-Scratch-Org --api-version 58.0 --source-dir ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
+
+            #10 Execute test for entire scratch org
+            - name: 'Execute test for entire scratch org'
+              run: |
+                sf apex run test --result-format human --target-org Test-Scratch-Org --synchronous --code-coverage --detailed-coverage
+
+            # Housekeeping
+            - name: 'Delete scratch org'
+              if: always()
+              run: |
+                sf org delete scratch --target-org Test-Scratch-Org --no-prompt
