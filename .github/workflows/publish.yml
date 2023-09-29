@@ -1,7 +1,24 @@
-on: push
+name: CheckChangesInPullRequestToMain
+ # Triggers the workflow on push or pull request events but only for the main branch
+on: 
+  push
+  #pull_request:
+  #  branches: main
 jobs:
     scratch-org-test:
         runs-on: ubuntu-latest
+        #permission in public GitHub repositories for "Publish Test Results" action
+        permissions:
+          checks: write
+          pull-requests: write
+
+        #permission in private GitHub repositories for "Publish Test Results" action
+        #permissions:
+        #  contents: read
+        #  issues: read
+        #  checks: write
+        #  pull-requests: write
+
         steps:
             #1. Checkout the source code for identifying changes
             - uses: actions/checkout@v4
@@ -82,16 +99,25 @@ jobs:
             #10 Execute test for entire scratch org
             - name: 'Execute test for entire scratch org'
               run: |
-                sf apex run test --result-format human --target-org Test-Scratch-Org --synchronous --code-coverage --detailed-coverage --output-dir ./TestRuns
+                sf apex run test --result-format human --target-org Test-Scratch-Org --synchronous --code-coverage --detailed-coverage --output-dir ./test-results
 
             #11 Upload code coverage data
-            - name: Upload coverage reports to Codecov
-              uses: codecov/codecov-action@v3
-              env:
-                CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            #- name: Upload coverage reports to Codecov
+            #  uses: codecov/codecov-action@v3
+            #  env:
+            #    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+            #11 Publish Test Results
+            - name: Publish Test Results
+              uses: EnricoMi/publish-unit-test-result-action@v2
+              if: always()
+              with:
+                files: |
+                  test-results/test-result.json
+                  test-results/test-result.xml
+                  
             #12 Housekeeping
             - name: 'Delete scratch org'
               if: always()
-              run: |
+              run: |  
                 sf org delete scratch --target-org Test-Scratch-Org --no-prompt           
