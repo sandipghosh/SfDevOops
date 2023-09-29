@@ -31,7 +31,8 @@ jobs:
                     fi
                   fi
                 done
-                echo ::set-output name=CHANGED_FILES:: $res 
+                #echo ::set-output name=CHANGED_FILES:: $res 
+                echo CHANGED_FILES=$res >> $GITHUB_OUTPUT
 
             #4. Checkout the source code to deploy
             - name: 'Checkout source code'
@@ -69,8 +70,12 @@ jobs:
             #9 Deply the changes into the sales force scratch org
             - name: 'Deply the changes into the sales force scratch org'
               run: |
-                echo ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
-                sf project deploy start --target-org Test-Scratch-Org --api-version 58.0 --source-dir ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
+                if [[ -z ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }} ]]; then
+                    echo "No changed or added files is fund to deploy"
+                else
+                    echo ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
+                    sf project deploy start --target-org Test-Scratch-Org --api-version 58.0 --source-dir ${{ steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES }}
+                fi
 
             #10 Execute test for entire scratch org
             - name: 'Execute test for entire scratch org'
