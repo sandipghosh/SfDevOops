@@ -1,0 +1,381 @@
+{
+  "summary": {
+    "outcome": "Passed",
+    "testsRan": 1,
+    "passing": 1,
+    "failing": 0,
+    "skipped": 0,
+    "passRate": "100%",
+    "failRate": "0%",
+    "testStartTime": "Fri Sep 29 2023 5:23:31 PM",
+    "testExecutionTime": "263 ms",
+    "testTotalTime": "263 ms",
+    "commandTime": "1 ms",
+    "hostname": "https://ucla-cfs--devops.sandbox.my.salesforce.com",
+    "orgId": "00D8H0000008ggcUAA",
+    "username": "sghosh@finance.ucla.edu.devops",
+    "testRunId": "",
+    "testRunCoverage": "100%",
+    "orgWideCoverage": "82%"
+  },
+  "tests": [
+    {
+      "Id": "",
+      "QueueItemId": "",
+      "StackTrace": "",
+      "Message": "",
+      "AsyncApexJobId": "",
+      "MethodName": "textGetMessage",
+      "Outcome": "Pass",
+      "ApexClass": {
+        "Id": "01p8H00000GhVJrQAN",
+        "Name": "SampleApexTest",
+        "NamespacePrefix": null
+      },
+      "RunTime": 101,
+      "FullName": "SampleApexTest.textGetMessage"
+    }
+  ],
+  "coverage": {
+    "name": [
+      {
+        "id": "01p8H00000GhVJqQAN",
+        "name": "SampleApex",
+        "totalLines": 2,
+        "lines": {
+          "2": 1,
+          "4": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000C5zBQAS",
+        "name": "RHX_Case",
+        "totalLines": 5,
+        "lines": {
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1
+        },
+        "totalCovered": 5,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000C60dQAC",
+        "name": "akaAttachmentTrigger",
+        "totalLines": 2,
+        "lines": {
+          "17": 1,
+          "18": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000C60eQAC",
+        "name": "akaCaseTrigger",
+        "totalLines": 2,
+        "lines": {
+          "17": 1,
+          "18": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000C60fQAC",
+        "name": "akaContentDocumentLinkTrigger",
+        "totalLines": 2,
+        "lines": {
+          "17": 1,
+          "18": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000C60gQAC",
+        "name": "akaSupportDocumentTrigger",
+        "totalLines": 2,
+        "lines": {
+          "17": 1,
+          "18": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q1I000000CAYGQA4",
+        "name": "akaSupportDocumentUpsertTrigger",
+        "totalLines": 3,
+        "lines": {
+          "6": 1,
+          "7": 1,
+          "9": 1
+        },
+        "totalCovered": 3,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q8W000000ppJYQAY",
+        "name": "CaseTrigger",
+        "totalLines": 2,
+        "lines": {
+          "2": 1,
+          "3": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q8W000000ppJZQAY",
+        "name": "UserTrigger",
+        "totalLines": 2,
+        "lines": {
+          "2": 1,
+          "3": 1
+        },
+        "totalCovered": 2,
+        "coveredPercent": 100
+      },
+      {
+        "id": "01q8W000001BlAFQA0",
+        "name": "TaskTrigger",
+        "totalLines": 8,
+        "lines": {
+          "4": 1,
+          "5": 1,
+          "7": 1,
+          "8": 1,
+          "12": 1,
+          "14": 1,
+          "15": 1,
+          "17": 1
+        },
+        "totalCovered": 8,
+        "coveredPercent": 100
+      }
+    ],
+    "records": [
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [
+            2,
+            4
+          ],
+          "uncoveredLines": []
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 2,
+        "ApexClassOrTrigger": {
+          "Id": "01p8H00000GhVJqQAN",
+          "Name": "SampleApex"
+        },
+        "NumLinesUncovered": 0
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            17,
+            18
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000C60gQAC",
+          "Name": "akaSupportDocumentTrigger"
+        },
+        "NumLinesUncovered": 2
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            2,
+            3
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q8W000000ppJZQAY",
+          "Name": "UserTrigger"
+        },
+        "NumLinesUncovered": 2
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            4,
+            5,
+            7,
+            8,
+            12,
+            14,
+            15,
+            17
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q8W000001BlAFQA0",
+          "Name": "TaskTrigger"
+        },
+        "NumLinesUncovered": 8
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            6,
+            7,
+            9
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000CAYGQA4",
+          "Name": "akaSupportDocumentUpsertTrigger"
+        },
+        "NumLinesUncovered": 3
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            2,
+            3
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q8W000000ppJYQAY",
+          "Name": "CaseTrigger"
+        },
+        "NumLinesUncovered": 2
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            17,
+            18
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000C60dQAC",
+          "Name": "akaAttachmentTrigger"
+        },
+        "NumLinesUncovered": 2
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            17,
+            18
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000C60fQAC",
+          "Name": "akaContentDocumentLinkTrigger"
+        },
+        "NumLinesUncovered": 2
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000C5zBQAS",
+          "Name": "RHX_Case"
+        },
+        "NumLinesUncovered": 5
+      },
+      {
+        "ApexTestClass": {
+          "Id": "",
+          "Name": "SampleApexTest"
+        },
+        "Coverage": {
+          "coveredLines": [],
+          "uncoveredLines": [
+            17,
+            18
+          ]
+        },
+        "TestMethodName": "textGetMessage",
+        "NumLinesCovered": 0,
+        "ApexClassOrTrigger": {
+          "Id": "01q1I000000C60eQAC",
+          "Name": "akaCaseTrigger"
+        },
+        "NumLinesUncovered": 2
+      }
+    ],
+    "summary": {
+      "totalLines": 30,
+      "coveredLines": 30,
+      "orgWideCoverage": "82%",
+      "testRunCoverage": "100%"
+    }
+  }
+}
