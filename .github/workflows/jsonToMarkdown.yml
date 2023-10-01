@@ -1,4 +1,4 @@
-#Test 21
+#Test 22
 name: 'Convert JSON File to Markdown Text'
 on:
     push
@@ -12,7 +12,7 @@ jobs:
                 uses: dcarbone/install-jq-action@v2.0.2
                 with:
                     version: '1.7'
-                    force: false
+                    force: true
             
             # language=sh
             -   name: 'Check jq'
