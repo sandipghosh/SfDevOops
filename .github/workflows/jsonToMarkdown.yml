@@ -1,20 +1,28 @@
+#Test 21
 name: 'Convert JSON File to Markdown Text'
 on:
     push
+
 jobs:
     json-to-markdown:
         runs-on: ubuntu-latest
 
         steps:
-            -   uses: actions/checkout@v4
-                with:
-                    fetch-depth: 0
-
             -   name: 'Setup jq'
                 uses: dcarbone/install-jq-action@v2.0.2
                 with:
                     version: '1.7'
                     force: false
+            
+            # language=sh
+            -   name: 'Check jq'
+                run: |
+                    which jq
+                    jq --version
+
+            -   uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
 
             # Posting test result to workflow job summary
             -   name: 'Write to workflow job summary'
