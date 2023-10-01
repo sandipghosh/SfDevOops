@@ -1,4 +1,4 @@
-#Test 22
+#Test 23
 name: 'Convert JSON File to Markdown Text'
 on:
     push
@@ -31,4 +31,4 @@ jobs:
                     testSummary=$(jq -r  '"|NAME\t|VALUE\t|","|------------------------------\t|------------------------------\t|", ( .summary | to_entries[] | "|\(.key)\t|\(.value)\t|")' ./TestRuns/test-result.json | column -t -s $'\t')
                     testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|MESSAGE\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|----------\t|",(.tests.[] | "|\(if .Outcome == "Pass" then "✅" else "❌" end)\(.FullName)\t|\(.Outcome)\t|\(.Message)\t|\(.RunTime)\t|")' ./TestRuns/test-result.json | column -t -s $'\t')
                     codeCoverage=$(jq -r '"|CLASSES\t|PERCENT\t|UNCOVERED LINES\t|","|------------------------------\t|----------\t|--------------------\t|",(.coverage.name.[] as $coverageId | "|\(if $coverageId.coveredPercent >= 1 and $coverageId.coveredPercent < 25 then "⛔" elif $coverageId.coveredPercent >= 25 and $coverageId.coveredPercent < 50 then "⚠️" elif $coverageId.coveredPercent >= 50 and $coverageId.coveredPercent < 75 then "❗" else "☘️" end)\($coverageId.name)\t|\($coverageId.coveredPercent)\t|\(.coverage.records[] | select(.ApexClassOrTrigger.Id == $coverageId.id).Coverage.uncoveredLines | @csv)\t|")' ./TestRuns/test-result.json | column -t -s $'\t')
-                    echo -e "### <ins>Test Summary</ins> \n\n {testSummary} \n\n ### <ins>Test Results</ins> \n\n {testResults} \n\n ### <ins>Apex Code Coverage by Class</ins> {codeCoverage}"
+                    echo -e "### <ins>Test Summary</ins> \n\n ${testSummary} \n\n ### <ins>Test Results</ins> \n\n ${testResults} \n\n ### <ins>Apex Code Coverage by Class</ins> ${codeCoverage}"
