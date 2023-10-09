@@ -1,0 +1,7 @@
+<template>
+    <template lwc:if={caseData}>
+        <template for:each={caseData} for:item="caseRecord">
+            <span key={caseRecord.Id} class="case-info">{caseRecord.Subject}</span>
+        </template>
+    </template>
+</template>

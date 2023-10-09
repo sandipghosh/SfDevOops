@@ -1,0 +1,23 @@
+<template>
+    <p>{myNote}</p>
+    <lightning-button class="renderButton" onclick={renderNewParagraph}></lightning-button>
+    <template lwc:if={showNewParagraph}>
+        <span class="newParagraph">I love to learn Salesforce</span>
+    </template>
+    <template for:each={collections} for:item="person">
+        <span class="person-info" key={person.id}>{person.firstName}</span>
+    </template>
+    <template lwc:if={accounts.data}>
+        <template for:each={accounts.data} for:item="account">
+            <div class="account-info" key={account.Id}>{account.Name}</div>
+        </template>
+    </template>
+    <div class="navigation">{currentPage}</div>
+    <template lwc:if={cases}>
+        <template for:each={cases} for:item="caseRecord">
+            <span key={caseRecord.Id} class="case-info">{caseRecord.Subject}</span>
+        </template>
+
+        <c-my-child-component case-data={cases}></c-my-child-component>
+    </template>
+</template>
