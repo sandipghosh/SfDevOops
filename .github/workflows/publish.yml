@@ -1,9 +1,61 @@
-on: push
+name: CheckChangesInPullRequestToMain
+ # Triggers the workflow on push or pull request events but only for the main branch
+on: 
+  push
+  #pull_request:
+  #  branches: main
 jobs:
     scratch-org-test:
         runs-on: ubuntu-latest
+        #permission in public GitHub repositories for "Publish Test Results" action
+        permissions:
+          checks: write
+          pull-requests: write
+
+        #permission in private GitHub repositories for "Publish Test Results" action
+        #permissions:
+        #  contents: read
+        #  issues: read
+        #  checks: write
+        #  pull-requests: write
+
         steps:
-            #1. Install Salesforce CLI
+            #1. Checkout the source code for identifying changes
+            - uses: actions/checkout@v4
+              with:
+                fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+            #2 Get Added or Changed files
+            - name: 'Get added or changed from the currect changeset files'
+              uses: tj-actions/changed-files@v39
+              id: changed-files
+
+            #3 set all the Added or Changed files into a internal veriable 'CHANGED_FILES'
+            #Note: In the veriable assignment statement there should be no spaces between the variable name the equals operator and the value
+            - name: 'Echo Added or Changed files'
+              id: ConsolidatedChangedFiles
+              shell: bash
+              run: |
+                res=""
+                for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+                  if [[ $file != *"yml"* ]]; then
+                    if [[ -z "$res" ]]; then
+                      res=$file
+                      #echo $res                     
+                    else
+                      res="${res} ${file}"
+                      #echo $res
+                    fi
+                  fi
+                done
+                echo $res
+                echo "CHANGED_FILES=$res" >> $GITHUB_OUTPUT
+            
+            #4. Checkout the source code to deploy
+            - name: 'Checkout source code'
+              uses: actions/checkout@v4
+
+            #5. Install Salesforce CLI and set environment path veriable
             - name: 'Install Salesforce CLI'
               run: |
                 wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
@@ -12,21 +64,62 @@ jobs:
                 echo "$HOME/sf/bin" >> $GITHUB_PATH
                 ~/sf/bin/sf version
 
-            #2. Checkout the source code
-            - name: 'Checkout source code'
-              uses: actions/checkout@v4
-
-            #Get Added or Changed files
-            - name: 'Get Added or Changed files'
-              uses: tj-actions/changed-files@v39
-              id: changed-files
-              #with: 
-                #files: |
-                  #*.cls
-
-            #Display all the Added or Changed files
-            - name: 'Echo Added or Changed files'
+            #6. Get SFDX_URL from stored secret and extracted into a text files to use on login
+            - name: 'Populate auth file with SFDX_URL secret'
               run: |
-                for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-                  echo "$file was added or modified"
-                done
+                echo ${{secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
+                secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
+                if [ $secretFileSize == 1 ]; then
+                  echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
+                  exit 1;
+                fi
+
+            #7 Authenticate Salesforce org using SFDX_URL with Dev-Hub 
+            - name: 'Authenticate Salesforce org using SFDX_URL'
+              run: |
+                sf org login sfdx-url --sfdx-url-file ./DEVHUB_SFDX_URL.txt --set-default --alias ${{secrets.SOURCE_ORG}} --set-default-dev-hub --alias ${{secrets.DEV_HUB_ALIAS}} 
+                #devOopsHub
+
+            #8 Creating scratch org targeting to Dev-Hub "devOopsHub"
+            - name: 'Creating scratch org'
+              run: |
+                sf org create scratch --definition-file ./config/project-scratch-def.json --edition developer --alias ${{secrets.SCRATCH_ORG_ALIAS}}  --target-dev-hub ${{secrets.DEV_HUB_ALIAS}} 
+                #devOopsHub
+
+            #9 Deply the changes into the sales force scratch org
+            - name: 'Deply the changes into the sales force scratch org'
+              run: |
+                changedFiles="${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}"
+                if [[ -z "$changedFiles" ]]; then
+                    echo "No changed or added files is fund to deploy"
+                else
+                    echo $changedFiles
+                    sf project deploy start --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --api-version 59.0 --source-dir ${{steps.ConsolidatedChangedFiles.outputs.CHANGED_FILES}}
+                fi
+                #sf project deploy start --target-org Test-Scratch-Org --api-version 58.0
+
+            #10 Execute test for entire scratch org
+            - name: 'Execute test for entire scratch org'
+              run: |
+                sf apex run test --result-format human --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --synchronous --code-coverage --detailed-coverage --output-dir ./test-results
+
+            #11 Upload code coverage data
+            #- name: Upload coverage reports to Codecov
+            #  uses: codecov/codecov-action@v3
+            #  env:
+            #    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+            #11 Publish Test Results
+            - name: Publish Test Results
+              uses: EnricoMi/publish-unit-test-result-action@v2
+              if: always()
+              with:
+                files: |
+                  test-results/test-result.json
+                  test-results/test-result.xml
+
+            #12 Housekeeping
+            - name: 'Delete scratch org'
+              if: always()
+              run: |  
+                sf org delete scratch --target-org ${{secrets.SCRATCH_ORG_ALIAS}} --no-prompt           
