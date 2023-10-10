@@ -41,6 +41,7 @@ jobs:
         if: always()
         run: |
             if test -f ./jest-result.json; then
+              cat ./jest-result.json;
               # summaryMessage=$(jq '(.testResults.[] | .message)' ./jest-result.json);
               # echo 'Check Summary';
               # echo -e $summaryMessage;
