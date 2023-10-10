@@ -47,12 +47,10 @@ jobs:
         if: always()
         run: |
             if test -f ./jest-result.json; then
-              cat ./jest-result.json;
               summaryMessage=$(jq '(.testResults.[] | .message)' ./jest-result.json);
               echo -e $summaryMessage;
               testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|",(.testResults.[].assertionResults.[] | "|\(if .status == "passed" then "✅" else "❌" end)\(.fullName)\t|\(.status)\t|\(.duration)\t|")' ./jest-result.json | column -t -s $'\t');
-              echo -e "### <ins>Test Results</ins> \n\n${testResults}" > ./jest-result.md
-              cat ./jest-result.md
+              echo -e ""### <ins>Test Summary</ins> \n\n${summaryMessage} \n\n### <ins>Test Results</ins> \n\n${testResults}" > ./jest-result.md
               cat ./jest-result.md >> $GITHUB_STEP_SUMMARY
             else
               echo "No jest JSON file exists to parse"
