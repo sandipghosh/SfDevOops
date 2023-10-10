@@ -101,6 +101,6 @@ describe('Demo testing suite', ()=>{
     test('paragraph bind variable', ()=>{
         const myFirstElement = document.querySelector('c-my-first-component');
         const paragraphText = myFirstElement.shadowRoot.querySelector('p');
-        expect(paragraphText.textContent).toBe('Salesforce is existing 11');
+        expect(paragraphText.textContent).toBe('Salesforce is existing');
     });
 });
