@@ -47,9 +47,9 @@ jobs:
         if: always()
         run: |
             if test -f ./test-results/jest-result.json; then
-              summaryMessage=$(jq '(.testResults.[] | .message)' ./test-results/jest-result.json | sed 's/\\//g');
-              summaryWithoutQuote=$summaryMessage| sed 's/\\//g';
-              if [ "$summaryWithoutQuote" = '""' ]; then
+              summaryMessage=$(jq '(.testResults.[] | .message)' ./test-results/jest-result.json);
+              # summaryWithoutQuote=$summaryMessage| sed 's/\\//g';
+              if [ $("$summaryWithoutQuote" | sed 's/\\//g') = '""' ]; then
                 summaryMessage="All test executions ✅ passed";
               fi
               testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|",(.testResults.[].assertionResults.[] | "|\(if .status == "passed" then "✅" else "❌" end)\(.fullName)\t|\(.status)\t|\(.duration)\t|")' ./test-results/jest-result.json | column -t -s $'\t');
