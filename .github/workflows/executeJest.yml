@@ -36,4 +36,4 @@ jobs:
       - name: "Run the tests"
         run: |
           output=$(npm run test:unit:coverage:annotation);
-          echo "$output"
+          echo "${output}"
