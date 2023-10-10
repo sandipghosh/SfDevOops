@@ -103,6 +103,6 @@ describe('Demo testing suite', ()=>{
         const paragraphText = myFirstElement.shadowRoot.querySelector('p');
 
         //expect(paragraphText.length).toBe(10);
-        expect(paragraphText.textContent).toBe('Salesforce is existing 3');
+        expect(paragraphText.textContent).toBe('Salesforce is existing 4');
     });
 });
