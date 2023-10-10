@@ -47,6 +47,7 @@ jobs:
         if: always()
         run: |
             if test -f ./test-results/jest-result.json; then
+              cat ./test-results/jest-result.json;
               summaryMessage=$(jq '(.testResults.[] | .message)' ./test-results/jest-result.json);
               # summaryWithoutQuote=$summaryMessage| sed 's/\\//g';
               if [ $(echo "$summaryMessage" | sed 's/\\//g') = '""' ]; then
