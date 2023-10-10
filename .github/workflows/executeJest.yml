@@ -38,6 +38,7 @@ jobs:
             npm run test:unit:coverage:annotation
 
       - name: "Extract Test Results"
+        if: always()
         run: |
             if test -f ./jest-result.json; then
               summaryMessage=$(jq '(.testResults.[] | .message)' ./jest-result.json);
