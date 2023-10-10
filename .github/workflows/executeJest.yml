@@ -35,7 +35,5 @@ jobs:
       # Execute LWC component tests
       - name: "Run the tests"
         run: |
-          npm run test:unit:coverage:annotation
-          echo "::group::Jest Annotations
-          ::error file=C%3A\SANDIP_WORK\POC\SfDevOops\Demo\main\default\lwc\myFirstComponent\__tests__\myFirstComponent.test.js,line=105,col=38::Error: expect(received).toBe(expected) // Object.is equality%0A%0AExpected: 10%0AReceived: undefined%0A    at Object.toBe (C:\SANDIP_WORK\POC\SfDevOops\Demo\main\default\lwc\myFirstComponent\__tests__\myFirstComponent.test.js:105:38)%0A    at Promise.then.completed (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\utils.js:298:28)%0A    at new Promise (<anonymous>)%0A    at callAsyncCircusFn (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\utils.js:231:10)%0A    at _callCircusTest (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\run.js:316:40)%0A    at _runTest (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\run.js:252:3)%0A    at _runTestsForDescribeBlock (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\run.js:126:9)%0A    at _runTestsForDescribeBlock (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\run.js:121:9)%0A    at run (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\run.js:71:3)%0A    at runAndTransformResultsToJestFormat (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)%0A    at jestAdapter (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)%0A    at runTestInternal (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-runner\build\runTest.js:367:16)%0A    at runTest (C:\SANDIP_WORK\POC\SfDevOops\node_modules\jest-runner\build\runTest.js:444:34)
-          ::endgroup::"
+          output=$(npm run test:unit:coverage:annotation);
+          echo "$output"
