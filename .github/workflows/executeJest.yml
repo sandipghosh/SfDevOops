@@ -35,5 +35,6 @@ jobs:
       # Execute LWC component tests
       - name: "Run the tests"
         run: |
-          output=$(npm run test:unit:coverage:annotation);
-          echo $output;
+            npm run test:unit:coverage:annotation
+            #   output=$(npm run test:unit:coverage:annotation);
+            #   echo $output;

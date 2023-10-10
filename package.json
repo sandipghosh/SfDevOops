@@ -11,7 +11,11 @@
     "test:unit:watch": "sfdx-lwc-jest --watch",
     "test:unit:debug": "sfdx-lwc-jest --debug",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
-    "test:unit:coverage:annotation": "sfdx-lwc-jest -- --ci --reporters=default --reporters='jest-github-actions-reporter'"
+    "test:unit:coverage:annotation": "sfdx-lwc-jest -- --ci --reporters=default --reporters='jest-github-reporter'",
+    "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+    "prettier:verify": "prettier --list-different \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+    "postinstall": "husky install",
+    "precommit": "lint-staged"
   },
   "devDependencies": {
     "@lwc/eslint-plugin-lwc": "^1.6.3",
@@ -25,8 +29,17 @@
     "eslint-plugin-jest": "^27.4.2",
     "husky": "^8.0.3",
     "jest-github-actions-reporter": "^1.0.3",
+    "jest-github-reporter": "^1.1.1",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "prettier-plugin-apex": "^2.0.1"
+  },
+  "lint-staged": {
+    "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
+      "prettier --write"
+    ],
+    "**/{aura,lwc}/**": [
+      "eslint"
+    ]
   }
 }
