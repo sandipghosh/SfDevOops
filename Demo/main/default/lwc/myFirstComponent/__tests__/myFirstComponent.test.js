@@ -103,6 +103,6 @@ describe('Positive testing suite', ()=>{
         const paragraphText = myFirstElement.shadowRoot.querySelector('p');
 
         //expect(paragraphText.length).toBe(10);
-        expect(paragraphText.textContent).toBe('Salesforce is existing');
+        expect(paragraphText.textContent).toBe('Salesforce is existing1');
     });
 });
