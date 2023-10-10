@@ -46,14 +46,14 @@ jobs:
       - name: "Extract Test Results"
         if: always()
         run: |
-            if test -f ./jest-result.json; then
-              summaryMessage=$(jq '(.testResults.[] | .message)' ./jest-result.json | sed 's/\\//g');
+            if test -f ./test-results/jest-result.json; then
+              summaryMessage=$(jq '(.testResults.[] | .message)' ./test-results/jest-result.json | sed 's/\\//g');
               if [ "$summaryMessage" = '""' ]; then
                 summaryMessage="All test executions ✅ passed";
               fi
-              testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|",(.testResults.[].assertionResults.[] | "|\(if .status == "passed" then "✅" else "❌" end)\(.fullName)\t|\(.status)\t|\(.duration)\t|")' ./jest-result.json | column -t -s $'\t');
-              echo -e "### <ins>Test Summary</ins> \n\n${summaryMessage} \n\n### <ins>Test Results</ins> \n\n${testResults}" > ./jest-result.md
-              cat ./jest-result.md >> $GITHUB_STEP_SUMMARY
+              testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|",(.testResults.[].assertionResults.[] | "|\(if .status == "passed" then "✅" else "❌" end)\(.fullName)\t|\(.status)\t|\(.duration)\t|")' ./test-results/jest-result.json | column -t -s $'\t');
+              echo -e "### <ins>Test Summary</ins> \n\n${summaryMessage} \n\n### <ins>Test Results</ins> \n\n${testResults}" > ./test-results/jest-result.md
+              cat ./test-results/jest-result.md >> $GITHUB_STEP_SUMMARY
             else
               echo "No jest JSON file exists to parse"
             fi
