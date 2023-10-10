@@ -36,5 +36,8 @@ jobs:
       - name: "Run the tests"
         run: |
             npm run test:unit:coverage:annotation
-            #   output=$(npm run test:unit:coverage:annotation);
-            #   echo $output;
+            summaryMessage=$(jq '(.testResults.[] | .message)' ./test-results/jest-result.json);
+            #testSummary=$(jq '(.testResults.[] | {"message":.message,"fileName":.name})' ./test-results/jest-result.json)
+            testResults=$(jq -r '"|TEST NAME\t|OUTCOME\t|RUNTIME (MS)\t|","|------------------------------\t|----------\t|----------\t|",(.testResults.[].assertionResults.[] | "|\(if .status == "passed" then "✅" else "❌" end)\(.fullName)\t|\(.status)\t|\(.duration)\t|")' ./test-results/jest-result.json | column -t -s $'\t');
+            echo -e "### <ins>Test Summary</ins> \n\n ${summaryMessage} \n\n ### <ins>Test Results</ins> \n\n ${testResults}" > ./test-results/test-result.md
+            cat ./test-results/jest-result.md >> $GITHUB_STEP_SUMMARY

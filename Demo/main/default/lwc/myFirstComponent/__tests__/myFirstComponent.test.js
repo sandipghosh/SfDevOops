@@ -20,7 +20,7 @@ jest.mock('@salesforce/apex/MyFirstController.getAccounts', ()=>{
     }
 }, {virtual: true});
 
-describe('Positive testing suite', ()=>{
+describe('Demo testing suite', ()=>{
     beforeEach(()=>{
         getCases.mockResolvedValue(mockCases);
         const myFirstElement = createElement('c-my-first-component', {
